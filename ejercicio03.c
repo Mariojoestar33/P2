@@ -11,7 +11,38 @@ typedef struct s_caracter caracter;
 
 int main() {
     // Declaraciones
-    char* mensaje = "Los sistemas ditribuidos se definen como aquellos sistemas que se componen de multiples computadoras que se comunican entre si a traves de una red, con el objetivo de compartir recursos y trabajar de manera conjunta en la realizacion de una tarea comun.";
+    FILE* file;
+    char* mensaje;
+    long tamaño;
+    file = fopen("unmanual.txt", "r");
+
+    if(file == NULL) {
+            printf("No se pudo abrir el archivo\n");
+            return 1;
+    }
+
+// Determinar el tamaño del archivo
+    fseek(file, 0, SEEK_END);
+    tamaño = ftell(file);
+    rewind(file);
+    
+    // Asignar memoria dinámica para almacenar el contenido del archivo
+    mensaje = (char *)malloc((tamaño + 1) * sizeof(char));
+    if (mensaje == NULL) {
+        fprintf(stderr, "No se pudo asignar memoria.\n");
+        return 1;
+    }
+
+    // Leer el contenido del archivo en el espacio de memoria asignado
+    if (fread(mensaje, sizeof(char), tamaño, file) != tamaño) {
+        fprintf(stderr, "Error al leer el archivo.\n");
+        return 1;
+    }
+    mensaje[tamaño] = '\0'; // Añadir el carácter nulo al final del contenido
+
+    // Cerrar el archivo
+    fclose(file);
+
     caracter* ptr = (caracter*)malloc(sizeof(caracter)*256); // 256 para abarcar todos los caracteres ASCII posibles
     
     // Inicializar el arreglo de caracteres
