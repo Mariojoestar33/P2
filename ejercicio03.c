@@ -35,8 +35,7 @@ int main() {
 
     // Se ingresa a un puntero el contenido del archivo
     while ((c = fgetc(archivo)) != EOF) {
-        // Verificar si el carácter es un dígito, un espacio en blanco o un carácter especial
-        if (isdigit((unsigned char)c) || isspace((unsigned char)c) || ispunct((unsigned char)c)) {
+        if (isdigit((unsigned char)c) || isspace((unsigned char)c) || ispunct((unsigned char)c)) { // Verificar si el carácter es un dígito, un espacio en blanco o un carácter especial
             punteroCaracter[(int)c].frecuencia++;
             longitud++;
         }
@@ -56,4 +55,5 @@ int main() {
     free(punteroCaracter);
 
     return 0;
+    
 }
