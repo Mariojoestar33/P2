@@ -1,72 +1,59 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+#include <ctype.h> // Para usar isdigit y isspace
 
 struct s_caracter {
-    char letra;
-    int cantidad;
+    char caracter;
+    int frecuencia;
 };
-
 typedef struct s_caracter caracter;
 
 int main() {
+
     // Declaraciones
-    FILE* file;
-    char* mensaje;
-    long tamaño;
-    file = fopen("unmanual.txt", "r");
+    FILE *archivo;
+    char c;
+    int longitud = 0;
+    int i = 0;
+    caracter* punteroCaracter = (caracter*)malloc(sizeof(caracter) * 256); // Declaramos un puntero con 256 direcciones que componen el código ASCII
 
-    if(file == NULL) {
-            printf("No se pudo abrir el archivo\n");
-            return 1;
-    }
-
-// Determinar el tamaño del archivo
-    fseek(file, 0, SEEK_END);
-    tamaño = ftell(file);
-    rewind(file);
-    
-    // Asignar memoria dinámica para almacenar el contenido del archivo
-    mensaje = (char *)malloc((tamaño + 1) * sizeof(char));
-    if (mensaje == NULL) {
-        fprintf(stderr, "No se pudo asignar memoria.\n");
-        return 1;
-    }
-
-    // Leer el contenido del archivo en el espacio de memoria asignado
-    if (fread(mensaje, sizeof(char), tamaño, file) != tamaño) {
-        fprintf(stderr, "Error al leer el archivo.\n");
-        return 1;
-    }
-    mensaje[tamaño] = '\0'; // Añadir el carácter nulo al final del contenido
-
-    // Cerrar el archivo
-    fclose(file);
-
-    caracter* ptr = (caracter*)malloc(sizeof(caracter)*256); // 256 para abarcar todos los caracteres ASCII posibles
-    
-    // Inicializar el arreglo de caracteres
+    // Inicialización de las estructuras de los 256 ASCII
     for (int i = 0; i < 256; i++) {
-        ptr[i].letra = (char)i;
-        ptr[i].cantidad = 0;
+        punteroCaracter[i].caracter = (char)i;
+        punteroCaracter[i].frecuencia = 0;
     }
 
-    // Calcular la frecuencia de cada carácter en el mensaje
-    int len = strlen(mensaje);
-    for (int i = 0; i < len; i++) {
-        ptr[(int)mensaje[i]].cantidad++;
+    // Lectura del archivo
+    archivo = fopen("textoEjercicio03.txt", "r");
+
+    if (archivo == NULL) { // Verificación de apertura del archivo
+        printf("Error al tratar de abrir el archivo");
+        free(punteroCaracter); // Liberar memoria antes de salir
+        exit(1);
+    }
+
+    // Se ingresa a un puntero el contenido del archivo
+    while ((c = fgetc(archivo)) != EOF) {
+        // Verificar si el carácter es un dígito, un espacio en blanco o un carácter especial
+        if (isdigit((unsigned char)c) || isspace((unsigned char)c) || ispunct((unsigned char)c)) {
+            punteroCaracter[(int)c].frecuencia++;
+            longitud++;
+        }
     }
 
     // Imprimir el diccionario y la frecuencia de aparición
     printf("Diccionario y frecuencia de aparicion de cada simbolo:\n\ncaracter: frecuencia\n");
     for (int i = 0; i < 256; i++) {
-        if (ptr[i].cantidad > 0) {
-            printf("'%c': %d\n", ptr[i].letra, ptr[i].cantidad);
+        if (punteroCaracter[i].frecuencia > 0) {
+            printf("'%c': %d\n", punteroCaracter[i].caracter, punteroCaracter[i].frecuencia);
         }
     }
 
-    // Liberar memoria
-    free(ptr);
+    printf("El archivo tiene %d caracteres que son digitos, espacios en blanco o caracteres especiales\n", longitud);
+
+    fclose(archivo);
+    free(punteroCaracter);
 
     return 0;
 }
