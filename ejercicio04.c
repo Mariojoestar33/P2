@@ -12,8 +12,7 @@ bool verificar(float x, float y);
 int main() {
     float x, y;
     int opcion;
-    while (opcion != 5)
-    {
+    while (opcion != 5) {
         opcion = 0;
         printf("Ingrese la operacion a realizar:\n\n");
         printf("1)Suma\n2)Resta\n3)Multiplicacion\n4)Division\n5)Salir\n\n");
