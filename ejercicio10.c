@@ -22,7 +22,7 @@ int main() {
     }
     //Impresion de la lista ordenada
     for(int i = 0; i < MAX; i++) {
-        printf("%d", numero[i]);
+        printf("%d\n", numero[i]);
     }
     return 0;
 }
