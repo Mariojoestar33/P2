@@ -48,5 +48,8 @@ int main() {
             printf("'%c': %d\n", puntero[i].caracter, puntero[i].frecuencia);
         }
     }
-    return 0;
+    //Liberacion de memoria
+    free(puntero);
+    free(mensaje);
+    return 0; //Fin del programa
 }
