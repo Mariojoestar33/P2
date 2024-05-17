@@ -1,106 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <ctype.h>
 
-float suma(float x, float y);
-float resta(float x, float y);
-float multiplicacion(float x, float y);
-float division(float x, float y);
-bool verificar(float x, float y);
+float suma(float arr[], int n);
+float resta(float arr[], int n);
+float multiplicacion(float arr[], int n);
+float division(float arr[], int n);
 
 int main() {
-    float x, y;
+    // Declaraciones
+    int n;
     int opcion;
-    while (opcion != 5) {
+    while (1) {
         opcion = 0;
         printf("Ingrese la operacion a realizar:\n\n");
-        printf("1)Suma\n2)Resta\n3)Multiplicacion\n4)Division\n5)Salir\n\n");
+        printf("1) Suma\n2) Resta\n3) Multiplicacion\n4) Division\n5) Salir\n\n");
         scanf("%d", &opcion);
         printf("\n");
-        switch (opcion) {
-        case (1): {
-            printf("Ingrese el primer numero:\n");
-            scanf("%f", &x);
-            printf("Ingrese el segundo numero:\n");
-            scanf("%f", &y);
-            printf("El resultado es: %f\n", suma(x, y));
-            break;
-        }
-
-        case (2): {
-            printf("Ingrese el primer numero:\n");
-            scanf("%f", &x);
-            printf("Ingrese el segundo numero:\n");
-            scanf("%f", &y);
-            printf("El resultado es: %f\n", resta(x, y));
-            break;
-        }
-
-        case (3): {
-            printf("Ingrese el primer numero:\n");
-            scanf("%f", &x);
-            printf("Ingrese el segundo numero:\n");
-            scanf("%f", &y);
-            printf("El resultado es: %f\n", multiplicacion(x, y));
-            break;
-        }
-
-        case(4): {
-            printf("Ingrese el primer numero:\n");
-            scanf("%f", &x);
-            printf("Ingrese el segundo numero:\n");
-            scanf("%f", &y);
-            printf("El resultado es: %f\n", division(x, y));
-            break;
-        }
-
-        case(5): {
+        if (opcion == 5) {
             printf("\n\nHasta la proxima!!!\n\n");
             break;
         }
-        
-        default:
+
+        if (opcion < 1 || opcion > 5) {
             printf("\nOpcion invalida\n\n");
+            continue;
+        }
+
+        printf("Ingrese el numero de elementos:\n");
+        scanf("%d", &n);
+        if (n <= 0) {
+            printf("Numero de elementos invalido\n");
+            continue;
+        }
+
+        float arr[n];
+        for (int i = 0; i < n; i++) {
+            printf("Ingrese el elemento %d:\n", i + 1);
+            scanf("%f", &arr[i]);
+        }
+
+        switch (opcion) {
+        case 1:
+            printf("El resultado es: %f\n", suma(arr, n));
+            break;
+        case 2:
+            printf("El resultado es: %f\n", resta(arr, n));
+            break;
+        case 3:
+            printf("El resultado es: %f\n", multiplicacion(arr, n));
+            break;
+        case 4:
+            printf("El resultado es: %f\n", division(arr, n));
             break;
         }
     }
-    
+
     return 0;
 }
 
-float suma(float x, float y) {
-    return (x + y);
-}
-
-float resta(float x, float y) {
-    return (x - y);
-}
-
-float multiplicacion(float x, float y) {
-    return (x * y);
-}
-
-float division(float x, float y) {
-    return (x / y);
-}
-
-bool verificar(float num1, float num2) {
-    char* cadena1 = NULL;
-    char* cadena2 = NULL;
-    sprintf(cadena1, "%f", num1); // Convertir el primer flotante a cadena
-    sprintf(cadena2, "%f", num2); // Convertir el segundo flotante a cadena
-    // Verificar el primer flotante
-    for (int i = 0; cadena1[i] != '\0'; i++) {
-        if (!isdigit(cadena1[i]) && cadena1[i] != '.' && cadena1[i] != '-') {
-            return false;
-        }
+float suma(float arr[], int n) {
+    float result = 0.0;
+    for (int i = 0; i < n; i++) {
+        result += arr[i];
     }
-    // Verificar el segundo flotante
-    for (int i = 0; cadena2[i] != '\0'; i++) {
-        if (!isdigit(cadena2[i]) && cadena2[i] != '.' && cadena2[i] != '-') {
-            return false;
-        }
+    return result;
+}
+
+float resta(float arr[], int n) {
+    float result = arr[0];
+    for (int i = 1; i < n; i++) {
+        result -= arr[i];
     }
-    return true;
+    return result;
+}
+
+float multiplicacion(float arr[], int n) {
+    float result = 1.0;
+    for (int i = 0; i < n; i++) {
+        result *= arr[i];
+    }
+    return result;
+}
+
+float division(float arr[], int n) {
+    if (n == 1) {
+        return arr[0];
+    }
+    float result = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] == 0) {
+            printf("Error: Division por cero\n");
+            exit(1);
+        }
+        result /= arr[i];
+    }
+    return result;
 }
